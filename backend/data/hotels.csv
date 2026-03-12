@@ -1,0 +1,11 @@
+id,country,city,name,stars,price_per_night,currency,near_attraction
+H1,Spain,Barcelona,Sea Breeze Resort,5,320,EUR,Near Barceloneta Beach
+H2,Spain,Barcelona,City Center Inn,3,110,EUR,Walking distance to La Rambla
+H3,Portugal,Lisbon,Harbor View Hotel,4,210,EUR,Overlooking Tagus river
+H4,Portugal,Lisbon,Old Town Suites,4,160,EUR,In Alfama historic district
+H5,Greece,Athens,Acropolis View Hotel,4,190,EUR,Panoramic view of Acropolis
+H6,Greece,Santorini,Cliffside Escape,5,380,EUR,On the caldera cliffs in Oia
+H7,Italy,Rome,Colosseum View Hotel,4,190,EUR,Overlooking the Colosseum
+H8,France,Paris,Eiffel View Suites,5,420,EUR,Direct view of Eiffel Tower
+H9,Germany,Berlin,Mitte Design Hotel,4,170,EUR,Central Mitte district
+H10,Switzerland,Zurich,Lakeside Retreat,4,260,CHF,On the shore of Lake Zurich

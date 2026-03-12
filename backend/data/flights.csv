@@ -1,0 +1,11 @@
+id,airline,origin,destination,seat_class,base_price,currency,baggage_included_kg,extra_baggage_price_per_kg
+F1,EuroWings,CAI,BCN,economy,320,USD,23,12
+F2,EuroWings,CAI,BCN,business,780,USD,32,15
+F3,Iberia,BCN,LIS,economy,140,EUR,20,10
+F4,Aegean Airlines,CAI,ATH,economy,280,USD,23,12
+F5,Aegean Airlines,CAI,ATH,business,650,USD,32,15
+F6,Santorini Air,ATH,SAN,economy,160,EUR,20,8
+F7,Swiss Air,CAI,ZRH,economy,350,USD,23,12
+F8,Swiss Air,ZRH,BCN,economy,180,EUR,20,10
+F9,Air France,CAI,CDG,economy,330,USD,23,12
+F10,Air France,CDG,BCN,business,420,EUR,32,15

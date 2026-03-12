@@ -1,0 +1,11 @@
+id,country,city,program_name,days,category,approx_budget_per_person,highlights
+TP1,Spain,Barcelona,Barcelona City & Beach Break,3,city_break,450,"Day 1: Gothic Quarter & La Rambla; Day 2: Sagrada Família & Park Güell; Day 3: Beach day & tapas tour"
+TP2,Spain,Barcelona,Gaudi & Culture Deep Dive,4,culture,650,"Day 1: Sagrada Família & Casa Batlló; Day 2: La Pedrera & Gràcia; Day 3: Montjuïc & museums; Day 4: Food market & sailing sunset"
+TP3,Portugal,Lisbon,Lisbon & Sintra Highlights,4,city_break,550,"Day 1: Alfama & Baixa; Day 2: Belém tower & Jerónimos; Day 3: Day trip to Sintra (palaces); Day 4: Tagus river cruise & fado night"
+TP4,Portugal,Porto,Porto & Douro Valley Experience,3,relax,480,"Day 1: Ribeira & port wine cellars; Day 2: Douro Valley river cruise & vineyards; Day 3: City walk & café culture"
+TP5,Greece,Athens,Ancient Athens & Riviera,3,culture,430,"Day 1: Acropolis & Plaka; Day 2: Acropolis museum & street food; Day 3: Athens Riviera half‑day trip"
+TP6,Greece,Santorini,Santorini Romantic Getaway,4,beach,900,"Day 1: Fira & sunset in Oia; Day 2: Catamaran cruise & beaches; Day 3: Wine tasting & villages; Day 4: Free day & shopping"
+TP7,Italy,Rome,Rome Classics & Vatican,4,culture,700,"Day 1: Colosseum & Roman Forum; Day 2: Vatican Museums & St. Peter's; Day 3: Trevi fountain & Spanish Steps; Day 4: Trastevere & food tour"
+TP8,France,Paris,Paris Essentials,3,city_break,620,"Day 1: Eiffel Tower & Seine cruise; Day 2: Louvre & Tuileries; Day 3: Montmartre & shopping"
+TP9,Germany,Berlin,Berlin History & Street Art,3,city_break,400,"Day 1: Brandenburg Gate & Reichstag; Day 2: Berlin Wall memorial & Museum Island; Day 3: Street art tour & Kreuzberg"
+TP10,Switzerland,Zurich,Zurich & Alps Day Trip,3,nature,780,"Day 1: Old town & lake; Day 2: Alps day trip (cable car/train); Day 3: Zurich museums & chocolate tasting"
