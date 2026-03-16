@@ -2,7 +2,7 @@
   font-family: 'Cairo', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   line-height: 1.6;
   font-weight: 400;
-  color-scheme: light;
+  color-scheme: dark;
 }
 
 *,
@@ -15,8 +15,8 @@
 
 body {
   min-height: 100vh;
-  background: #F9FAFB;
-  color: #181D27;
+  background: radial-gradient(circle at top left, #1a1a2e 0%, #0f0f1a 100%);
+  color: #E2E8F0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
