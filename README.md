@@ -178,13 +178,22 @@ sequenceDiagram
 
 ---
 
+## 🎬 Demo
+
+> Add your demo videos or GIFs here to showcase the project in action.
+
+<!-- Demo Video 1 -->
+<!-- Demo Video 2 -->
+
+---
+
 ## 🚀 Getting Started
 
 ### 📋 Prerequisites
 - **Python 3.10+** (Backend)
 - **Node.js 18+** (Frontend)
-- A **Supabase** Project (with loaded CSVs)
-- A **Groq** API Key
+- A **Supabase** Project (with your tables loaded)
+- A **Groq** API Key — get one free at [console.groq.com](https://console.groq.com)
 
 ### 🛠️ Backend Setup
 
@@ -196,12 +205,18 @@ sequenceDiagram
    ```bash
    pip install -r requirements.txt
    ```
-3. Set your environment variables in `.env`:
+3. Copy the example env file and fill in your values:
+   ```bash
+   cp .env.example .env
+   ```
+   Then open `.env` and set:
    ```env
-   SUPABASE_URL=your_supabase_url
-   SUPABASE_KEY=your_supabase_key
+   SUPABASE_URL=https://your-project-id.supabase.co
+   SUPABASE_ANON_KEY=your_supabase_anon_key
    GROQ_API_KEY=your_groq_api_key
    ```
+   > 💡 Find your Supabase URL and Anon Key in: **Project Settings → API**
+
 4. Run the Uvicorn server:
    ```bash
    uvicorn api:app --reload
