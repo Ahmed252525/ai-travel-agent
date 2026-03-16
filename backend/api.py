@@ -2,7 +2,8 @@ from __future__ import annotations
 
 from typing import Any, Dict, List
 
-from fastapi import FastAPI
+import json
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 
 from nodes import (
@@ -12,9 +13,10 @@ from nodes import (
 )
 from state import TravelState
 from supabase_client import get_supabase
-
+from graph import build_travel_graph
 
 app = FastAPI(title="Multi-Agent Travel API")
+graph = build_travel_graph()
 
 app.add_middleware(
     CORSMiddleware,
@@ -147,3 +149,93 @@ def flight_confirm(payload: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
+@app.websocket("/chat")
+async def websocket_chat(websocket: WebSocket):
+    await websocket.accept()
+
+    state: TravelState = {
+        "control": "conversation",
+        "messages": [],
+        "summary": "",
+        "planner": {},
+        "hotel": {},
+        "flight": {}
+    }
+
+    config = {"configurable": {"websocket": websocket}}
+
+    try:
+        while True:
+            data_str = await websocket.receive_text()
+            try:
+                data = json.loads(data_str)
+            except json.JSONDecodeError:
+                continue
+
+            msg_type = data.get("type")
+            if msg_type == "user_message":
+                state["messages"].append({"role": "user", "content": data.get("content", "")})
+            elif msg_type == "action":
+                action = data.get("action")
+                payload = data.get("payload", {})
+                
+                # Append user's action to history so LLM knows what they did
+                action_text = f"User selected action: {action}"
+                if payload:
+                    action_text += f" with payload {payload}"
+                state["messages"].append({"role": "user", "content": action_text})
+
+                if action == "trigger_planner":
+                    state["control"] = "planner"
+                elif action == "set_destination":
+                    state["planner"]["destination"] = payload.get("destination")
+                    state["control"] = "planner"
+                elif action == "select_program":
+                    state["control"] = "planner"
+                    state["planner"]["selected_program_id"] = payload.get("program_id")
+                elif action == "trigger_hotel":
+                    state["control"] = "hotel"
+                elif action == "select_hotel":
+                    state["control"] = "hotel"
+                    state["hotel"]["selected_hotel_id"] = payload.get("hotel_id")
+                elif action == "trigger_flight":
+                    state["control"] = "flight"
+                    if "seat_class" in payload:
+                        state["flight"]["seat_class"] = payload["seat_class"]
+                    if "baggage_kg" in payload:
+                        state["flight"]["baggage_kg"] = payload["baggage_kg"]
+                elif action == "select_flight":
+                    state["control"] = "flight"
+                    state["flight"]["selected_flight_id"] = payload.get("flight_id")
+                elif action == "confirm_booking":
+                    state["control"] = "flight"
+                    state["flight"]["user_confirmed"] = True
+
+            # Always route starting with whatever control is set to
+            state = await graph.ainvoke(state, config=config)
+            
+            # If the booking was just confirmed, send confirmation to frontend
+            if state.get("control") == "done":
+                confirmation = state.get("flight", {}).get("booking_confirmation", "")
+                if confirmation:
+                    await websocket.send_json({"type": "token", "content": "\n\n" + confirmation})
+                await websocket.send_json({"type": "end_of_message"})
+                booking_ref_val = state.get("flight", {}).get("booking_reference", "UNKNOWN")
+                await websocket.send_json({"type": "booking_done", "booking_reference": booking_ref_val})
+                
+                # Append a system note so the LLM remembers the booking happened
+                msgs = state.get("messages", [])
+                msgs.append({"role": "system", "content": f"SYSTEM NOTE: The booking was just successfully confirmed and saved to the database. Reference: {booking_ref_val}. The user may ask questions about it or start a new booking."})
+
+                # Reset state so user can start a new booking if they want
+                state = {
+                    "control": "conversation",
+                    "messages": msgs,
+                    "summary": "",
+                    "planner": {},
+                    "hotel": {},
+                    "flight": {}
+                }
+
+    except WebSocketDisconnect:
+        print("Client disconnected")
