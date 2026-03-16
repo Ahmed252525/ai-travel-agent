@@ -26,22 +26,18 @@ def get_supabase() -> Client:
     return create_client(url, key)
 
 
-def get_travel_program_for_city(city: str) -> Optional[Dict[str, Any]]:
+def get_travel_programs_for_city(city: str) -> List[Dict[str, Any]]:
     """
-    Fetch a single travel program for a given city.
-
-    Returns the first matching row or None.
+    Fetch all travel programs for a given city.
     """
     supabase = get_supabase()
     res = (
         supabase.table("travel_programs")
         .select("*")
         .eq("city", city)
-        .limit(1)
         .execute()
     )
-    data: List[Dict[str, Any]] = res.data or []
-    return data[0] if data else None
+    return res.data or []
 
 
 def get_hotels_for_city(city: str) -> List[Dict[str, Any]]:
