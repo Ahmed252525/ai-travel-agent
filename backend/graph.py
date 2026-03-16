@@ -8,58 +8,68 @@ from nodes import (
     flight_reservation_agent,
     hotel_booking_agent,
     travel_planner_agent,
+    conversation_agent,
 )
 from state import TravelState
 
 
-def control_router(
+def route_from_start(
     state: TravelState,
-) -> Literal["travel_planner", "hotel_booking", "flight_reservation", "__end__"]:
+) -> Literal["conversation_agent", "travel_planner", "hotel_booking", "flight_reservation"]:
     """
-    Router that performs strict hand-off based on ``state["control"]``.
-
-    It does not inspect or modify agent-local state beyond this flag.
+    Route from START based on control flag.
     """
     control = state.get("control")
-
     if control == "planner":
         return "travel_planner"
     if control == "hotel":
         return "hotel_booking"
     if control == "flight":
         return "flight_reservation"
-    if control == "done":
-        return "__end__"
+    return "conversation_agent"
 
-    # Default to planner if not initialized.
-    return "travel_planner"
-
+def route_after_conversation(
+    state: TravelState,
+) -> Literal["travel_planner", "hotel_booking", "flight_reservation", "__end__"]:
+    """
+    After conversation_agent, if it triggered a handoff, go to that agent.
+    Otherwise, if it just replied to the user, end the execution.
+    """
+    control = state.get("control")
+    if control == "planner":
+        return "travel_planner"
+    if control == "hotel":
+        return "hotel_booking"
+    if control == "flight":
+        return "flight_reservation"
+    
+    # Normally control is 'conversation' or 'done' after agents finish
+    return "__end__"
 
 def build_travel_graph():
     """Construct and compile the multi-agent travel graph."""
     builder: StateGraph[TravelState] = StateGraph(TravelState)
 
     # Core agent nodes.
+    builder.add_node("conversation_agent", conversation_agent)
     builder.add_node("travel_planner", travel_planner_agent)
     builder.add_node("hotel_booking", hotel_booking_agent)
     builder.add_node("flight_reservation", flight_reservation_agent)
 
-    # Router edges starting from START, using the control flag.
-    builder.add_conditional_edges(
-        START,
-        control_router,
-        {
-            "travel_planner": "travel_planner",
-            "hotel_booking": "hotel_booking",
-            "flight_reservation": "flight_reservation",
-            "__end__": END,
-        },
-    )
+    # Router edges starting from START
+    builder.add_conditional_edges(START, route_from_start)
 
-    # After each agent finishes, return to START so the router can decide.
-    builder.add_edge("travel_planner", START)
-    builder.add_edge("hotel_booking", START)
-    builder.add_edge("flight_reservation", START)
+    # After conversation, route to next agent or wait for user via END
+    builder.add_conditional_edges("conversation_agent", route_after_conversation)
+
+    # After each specialized agent, return to conversation_agent
+    builder.add_edge("travel_planner", "conversation_agent")
+    builder.add_edge("hotel_booking", "conversation_agent")
+    # After flight: either keep going to conversation_agent (selections) or end on done
+    builder.add_conditional_edges(
+        "flight_reservation",
+        lambda s: "__end__" if s.get("control") == "done" else "conversation_agent"
+    )
 
     graph = builder.compile()
     return graph
