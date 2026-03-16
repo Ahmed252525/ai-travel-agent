@@ -1,16 +1,30 @@
-# Python
-**/__pycache__/
-*.py[cod]
-*$py.class
-backend/venv/
-venv/
+# Environment variables – NEVER commit real secrets
 backend/.env
+.env
 
-# Node
-frontend/node_modules/
+# Allow the example template
+!backend/.env.example
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+venv/
+.venv/
+*.egg-info/
+dist/
+build/
+
+# Node / Frontend
+node_modules/
 frontend/dist/
-frontend/.env
+frontend/.vite/
 
-# OS
+# IDE
+.vscode/settings.json
+.idea/
+
+# Misc
+*.log
 .DS_Store
-Thumbs.db
