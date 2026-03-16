@@ -180,10 +180,15 @@ sequenceDiagram
 
 ## 🎬 Demo
 
-> Add your demo videos or GIFs here to showcase the project in action.
+> The following demos showcase the full conversational booking flow, dark UI, and real-time updates between frontend and backend.
 
-<!-- Demo Video 1 -->
-<!-- Demo Video 2 -->
+**Demo 1 – Full Booking Journey (Program → Hotel → Flight → Confirmation)**
+
+![AI Travel Agent Demo 1](./assets/demo1.gif)
+
+**Demo 2 – Conversational NLP Selection & UI Sync**
+
+![AI Travel Agent Demo 2](./assets/demo2.gif)
 
 ---
 
